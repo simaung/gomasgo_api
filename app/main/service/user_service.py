@@ -15,11 +15,7 @@ def save_new_user(data):
             registered_on=datetime.datetime.utcnow()
         )
         save_change(new_user)
-        response_object = {
-            'status': 'success',
-            'message': 'Successfully registered.'
-        }
-        return response_object, 201
+        return generate_token(new_user)
     else:
         response_object = {
             'status': 'fail',
@@ -36,3 +32,20 @@ def get_a_user(public_id):
 def save_change(data):
     db.session.add(data)
     db.session.commit()
+
+def generate_token(user):
+    try:
+        # generate the auth token
+        auth_token = user.encode_auth_token(user.id)
+        response_object = {
+            'status': 'success',
+            'message': 'Successfully registered.',
+            'Authorization': auth_token.decode()
+        }
+        return response_object, 201
+    except Exception as e:
+        response_object = {
+            'status': 'fail',
+            'message': 'Some error occured. Please try again.'
+        }
+        return response_object, 401
