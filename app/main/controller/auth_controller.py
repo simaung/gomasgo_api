@@ -10,7 +10,7 @@ user_auth = AuthDto.user_auth
 @api.route('/login')
 class UserLogin(Resource):
     """User login resource"""
-    @api.doc('user login')
+    @api.doc('user login', security=None)
     @api.expect(user_auth, validate=True)
     def post(self):
         # get the post data

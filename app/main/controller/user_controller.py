@@ -30,6 +30,7 @@ class UserList(Resource):
 @api.response(404, 'user not found')
 class User(Resource):
     @api.doc('get a user')
+    @token_required
     @api.marshal_with(_user)
     def get(self, public_id):
         """get a user given its identifier"""
